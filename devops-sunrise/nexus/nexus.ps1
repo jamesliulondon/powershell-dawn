@@ -1,0 +1,59 @@
+# Configuration
+$deployDir = "D:\Deploy"
+$program_file_root = "C:\Program Files"
+$7zipExe = "C:\Program Files\7-Zip\7z.exe"
+$chocoUri = "https://chocolatey.org/install.ps1"
+
+
+
+## Nexus
+$nexus_data_backup_url = "https://s3-eu-west-1.amazonaws.com/insight-devops/Nexus/Data.zip"
+$nexus_msi_url = "http://download.sonatype.com/nexus/3/nexus-3.0.1-01-win64.zip"
+$nexus_data_root = "D:\nexus3data"
+$nexus_program_folder = "Nexus"
+$nexus_data_directory = "sonatype-work"
+
+$nexus_zip_file = %{ $nexus_msi_url.split('/')[-1] }
+$nexus_data_backup_file = %{ $nexus_data_backup_url.split('/')[-1] }
+
+$nexus_zip_path = $deployDir + "\"  + $nexus_zip_file
+$nexus_data_backup_path = $deployDir + "\"  + $nexus_data_backup_file
+$nexus_program_folder_path = $program_file_root + "\" + $nexus_program_folder
+$nexus_binary = $nexus_program_folder_path + "\bin\nexus.exe"
+$nexus_data_path = $nexus_data_root + "\" + $nexus_data_directory
+
+echo "### Starting... ###"
+clear
+
+echo "### Create deploy directories ###"
+mkdir $deployDir -force | Out-Null
+$clnt = new-object System.Net.WebClient
+
+echo "### Create Program directories ###"
+mkdir $nexus_program_folder_path -force | Out-Null
+$clnt = new-object System.Net.WebClient
+
+echo "### Create Data directories ###"
+mkdir $nexus_data_path -force | Out-Null
+$clnt = new-object System.Net.WebClient
+
+echo "### Download Nexus ZIP ###"
+$clnt.DownloadFile($nexus_data_backup_url, $nexus_msi_path)
+
+echo "### Download Artifact Archive ###"
+$clnt.DownloadFile($nexus_msi_url, $nexus_data_backup_path)
+
+echo "### Choco Install ###"
+iwr $chocoUri -UseBasicParsing | iex
+choco install -r -y 7zip | Out-Null
+
+echo "### Unzip Nexus ###"
+iex "& '$7zipExe' 'x' '$nexus_zip_path' '-aoa' '-o$nexus_program_folder_path'" | Out-Null
+
+echo "### Unzip Nexus Data ###"
+iex "& '$7zipExe' 'x' '$nexus_data_backup_path' '-aoa' '-o$nexus_data_path'" | Out-Null
+
+echo "### Installs Service ###"
+iex "& '$nexus_binary' '/install'"
+
+echo "### The End ###"
