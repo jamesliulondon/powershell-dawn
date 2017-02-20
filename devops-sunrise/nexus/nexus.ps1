@@ -9,6 +9,7 @@ $chocoUri = "https://chocolatey.org/install.ps1"
 ## Nexus
 $nexus_data_backup_url = "https://s3-eu-west-1.amazonaws.com/insight-devops/Nexus/Data.zip"
 $nexus_msi_url = "http://download.sonatype.com/nexus/3/nexus-3.0.1-01-win64.zip"
+$nexus_config_location = "https://s3-eu-west-1.amazonaws.com/insight-devops/Nexus/nexus.vmoptions.j2"
 $nexus_data_root = "D:\nexus3data"
 $nexus_program_folder = "Nexus"
 $nexus_data_directory = "sonatype-work"
@@ -19,7 +20,8 @@ $nexus_data_backup_file = %{ $nexus_data_backup_url.split('/')[-1] }
 $nexus_zip_path = $deployDir + "\"  + $nexus_zip_file
 $nexus_data_backup_path = $deployDir + "\"  + $nexus_data_backup_file
 $nexus_program_folder_path = $program_file_root + "\" + $nexus_program_folder
-$nexus_binary = $nexus_program_folder_path + "\bin\nexus.exe"
+$nexus_config_path = $nexus_program_folder_path + "\bin"
+$nexus_binary = $nexus_config_path + "\nexus.exe"
 $nexus_data_path = $nexus_data_root + "\" + $nexus_data_directory
 
 echo "### Starting... ###"
@@ -49,6 +51,9 @@ choco install -r -y 7zip | Out-Null
 
 echo "### Unzip Nexus ###"
 iex "& '$7zipExe' 'x' '$nexus_zip_path' '-aoa' '-o$nexus_program_folder_path'" | Out-Null
+
+echo "### Download Nexus Configuration ###"
+$clnt.DownloadFile($nexus_config_location, $nexus_config_path)
 
 echo "### Unzip Nexus Data ###"
 iex "& '$7zipExe' 'x' '$nexus_data_backup_path' '-aoa' '-o$nexus_data_path'" | Out-Null
