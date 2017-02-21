@@ -7,6 +7,6 @@
 -Dkaraf.base=.
 -Dkaraf.etc=etc
 -Djava.util.logging.config.file=etc/java.util.logging.properties
--Dkaraf.data=D:\nexus3data\sonatype-work
+-Dkaraf.data=D:\nexus3data\sonatype-work\data
 -Djava.io.tmpdir=D:\nexus3data\sonatype-work\tmp
 -Dkaraf.startLocalConsole=false
