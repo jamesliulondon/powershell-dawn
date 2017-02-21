@@ -41,6 +41,12 @@ $dbConfigFile = "database.properties"
 $dbConfigOriginPath = $deployDir + "\" + $dbConfigFile
 $dbBackupOriginPath = $deployDir + "\" + $dbBackupFile
 
+$datatar_untar_command = @'
+$7zipExe x $teamCityTarOriginPath -aoa -o$deployDir
+'@
+
+
+
 echo "### Starting... ###"
 clear
 
@@ -69,9 +75,13 @@ iwr $chocoUri -UseBasicParsing | iex
 choco install -r -y 7zip | Out-Null
 
 echo "### Untar and Move TeamCity ###"
+echo "### - GUNZIP ###"
 iex "& '$7zipExe' 'x' '$teamCityOriginPath' '-aoa' '-o$deployDir'" | Out-Null
+echo "### - UNTAR ###"
 iex "& '$7zipExe' 'x' '$teamCityTarOriginPath' '-aoa' '-o$deployDir'" | Out-Null
+echo "### - MOVE ###"
 mv "$teamCityOriginDir" "$teamCityInstallDir" -Force | Out-Null
+
 
 echo "### Untar and Copy JDBC ###"
 iex "& '$7zipExe' 'x' '$sqlJBDCOriginPath' '-aoa' '-o$deployDir'" | Out-Null
