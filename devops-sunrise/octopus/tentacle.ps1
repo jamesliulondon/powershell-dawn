@@ -36,13 +36,13 @@ break
 
 echo "### Install Octopus Configure ###"
 $octopus_configure_instance = @'
-& $tentacle_exe_path create-instance --instance "Tentacle" --config "D:\Octopus\Tentacle.config" --console
+& $tentacle_exe_path create-instance --instance "Tentacle" --config "D:\Octopus\Tentacle.config" --console 
 '@
 $octopus_configure_newcert = @'
 & $tentacle_exe_path new-certificate --instance "Tentacle" --if-blank --console
 '@
 $octopus_configure_resettrusts = @'
-& $tentacle_exe_pathconfigure --instance "Tentacle" --reset-trust --console
+& $tentacle_exe_path configure --instance "Tentacle" --reset-trust --console
 '@
 $octopus_define_port = @'
 & $tentacle_exe_path configure --instance "Tentacle" --home "D:\Octopus" --app "D:\Octopus\Applications" --port "10933" --console
@@ -63,25 +63,24 @@ $octopus_startconsole = @'
 start-sleep 10
 
 echo "- create-instance"
-iex $octopus_configure_instance | Out-Null
+iex $octopus_configure_instance 
 echo "- create-newcerts"
-iex $octopus_configure_newcert  | Out-Null
+iex $octopus_configure_newcert  
 echo "- create-resettrusts"
-iex $octopus_configure_resettrusts  | Out-Null
+iex $octopus_configure_resettrusts 
 echo "- openport"
-iex $octopus_define_port  | Out-Null
+iex $octopus_define_port  
 echo "- create-newtrust"
-iex $octopus_configure_newtrusts  | Out-Null
+iex $octopus_configure_newtrusts  
 echo "- create-SA-password"
-iex $octopus_reconfigure_firewall  | Out-Null
+iex $octopus_reconfigure_firewall  
 echo "- reconfigure-firewall"
-iex $octopus_register_apikey  | Out-Null
+#iex $octopus_register_apikey  
 echo "- create-masterkey"
-iex $octopus_startconsole  | Out-Null
+iex $octopus_startconsole  
 
 
 
-Write-Host "Remember to restore the octopusdeploy database.":w
 
 #iex "& '$octopus_exe_path' 'service' '/install'"
 #iex "& '$octopus_exe_path' 'service' '/start'"
