@@ -91,12 +91,22 @@ cp "$sqlJDBCJar" "$sqlJBDCInstallDir" | Out-Null
 
 echo "### SyncDB ###"
 iex "& 'echo' '$teamCityMaintainDBCmd restore' '-A' '$teamCityDataDir' '-F' '$dbBackupOriginPath' '-T' '$dbConfigOriginPath'"
-iex "& '$teamCityMaintainDBCmd' 'restore' '-A' '$teamCityDataDir' '-F' '$dbBackupOriginPath' '-T' '$dbConfigOriginPath'"
+iex "& '$teamCityMaintainDBCmd' 'restore' '-A' '$teamCityDataDir' '-F' '$dbBackupOriginPath' '-T' '$dbConfigOriginPath'"  | Out-Null
+#this might fail#
+Remove-Item -Recurse -Force C:\ProgramData\JetBrains\TeamCity\config | Out-Null
+Remove-Item -Recurse -Force C:\ProgramData\JetBrains\TeamCity\plugins | Out-Null
+Remove-Item -Recurse -Force C:\ProgramData\JetBrains\TeamCity\system | Out-Null
+
+echo "### Restart ###"
+iex "& '$teamCityMaintainDBCmd' 'restore' '-A' '$teamCityDataDir' '-F' '$dbBackupOriginPath' '-T' '$dbConfigOriginPath'"  
+
+echo "### Give it 5 seconds ###"
+Start-Sleep 5
 
 echo "###Unzip Artifacts ###"
 iex "& '$7zipExe' 'x' '$artifactsOriginPath' '-aoa' '-o$deployDir'" | Out-Null
 
 echo "###X-Copy Artifacts ###"
-iex "'xcopy' '$artifactsSrcDir' '$artifactsDestDir' '/E' '/C' '/H' '/R' '/Y' '/O'"
+iex "& 'xcopy' '$artifactsSrcDir' '$artifactsDestDir' '/E' '/C' '/H' '/R' '/Y' '/O'"
 
 echo "### The End ###"

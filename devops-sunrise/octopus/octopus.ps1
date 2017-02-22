@@ -40,10 +40,10 @@ echo "### Download Octopus MSI ###"
 $clnt.DownloadFile($octopusUrl, $octopus_install_path)
 
 echo "### Download SQL Archive ###"
-$clnt.DownloadFile($octopus_teamcity_plugin_url, $octopus_sql_archive_path)
+#$clnt.DownloadFile($octopus_teamcity_plugin_url, $octopus_sql_archive_path)
 
 echo "### Download TeamCityPlugin ###"
-$clnt.DownloadFile($octopus_teamcity_plugin_url, $octopus_teamcity_plugin_path)
+#$clnt.DownloadFile($octopus_teamcity_plugin_url, $octopus_teamcity_plugin_path)
 
 echo "### Download Tentacle ###"
 $clnt.DownloadFile($octopus_tentacle_url, $octopus_tentacle_path)
@@ -61,7 +61,7 @@ $octopus_configure_sqlconfigfile = @'
 & $octopus_exe_path create-instance --instance "OctopusServer" --config "D:\Octopus\OctopusServer.config"
 '@
 $octopus_configure_sqlconn = @'
-& $octopus_exe_path configure --instance "OctopusServer" --home "D:\Octopus" --storageConnectionString "Data Source=sqlserver\SQLEXPRESS;Initial Catalog=OctopusDeploy;Integrated Security=False;ID=sa;Password=P@ssword1" --upgradeCheck "True" --upgradeCheckWithStatistics "True" --webAuthenticationMode "UsernamePassword" --webForceSSL "False" --webListenPrefixes "http://localhost:80/" --commsListenPort "10943" --serverNodeName "sqlserver"
+& $octopus_exe_path configure --instance "OctopusServer" --home "D:\Octopus" --storageConnectionString "Data Source=sqlserver;Initial Catalog=OctopusDeploy;Integrated Security=False;UID=sa;Password=P@ssword1" --upgradeCheck "True" --upgradeCheckWithStatistics "True" --webAuthenticationMode "UsernamePassword" --webForceSSL "False" --webListenPrefixes "http://localhost:80/" --commsListenPort "10943" --serverNodeName "sqlserver"
 '@
 
 
@@ -72,7 +72,7 @@ $octopus_sql_stop = @'
 & $octopus_exe_path service --instance "OctopusServer" --stop
 '@
 $octopus_configure_sqlsa = @'
-& $octopus_exe_path admin --instance "OctopusServer" --username "admin" --email "admin@admin.com" --password "P@ssword1"
+& $octopus_exe_path admin --instance "OctopusServer" --username "admin" --email "admin@admin.com" --password "Sunr1s3!"
 '@
 $octopus_configure_license = @'
 & $octopus_exe_path license --instance "OctopusServer" --licenseBase64 "PExpY2Vuc2UgU2lnbmF0dXJlPSJjQzhGdVhpcTRYb2g0b3lCQ0JHY1AxbkVKdjd5em9jaFExcms1cyt0VlZ2OVJ2c0V0M2hFenhtc1A2YWEyV2JBeWpPTjg5N2FNYkMwNDNqTzh4bU5EQT09Ij4NCiAgPExpY2Vuc2VkVG8+amFtZXM8L0xpY2Vuc2VkVG8+DQogIDxMaWNlbnNlS2V5PjEyNDI0LTYxMjUwLTc3NDI2LTkyMjM1PC9MaWNlbnNlS2V5Pg0KICA8VmVyc2lvbj4yLjA8IS0tIExpY2Vuc2UgU2NoZW1hIFZlcnNpb24gLS0+PC9WZXJzaW9uPg0KICA8VmFsaWRGcm9tPjIwMTctMDItMDc8L1ZhbGlkRnJvbT4NCiAgPFZhbGlkVG8+MjAxNy0wMy0yNDwvVmFsaWRUbz4NCiAgPFByb2plY3RMaW1pdD5VbmxpbWl0ZWQ8L1Byb2plY3RMaW1pdD4NCiAgPE1hY2hpbmVMaW1pdD5VbmxpbWl0ZWQ8L01hY2hpbmVMaW1pdD4NCiAgPFVzZXJMaW1pdD5VbmxpbWl0ZWQ8L1VzZXJMaW1pdD4NCjwvTGljZW5zZT4NCg=="
@@ -105,9 +105,10 @@ iex $octopus_configure_storagemasterkey  | Out-Null
 
 
 
-Write-Host "Remember to restore the octopusdeploy database.":w
+Write-Host "Remember to restore the octopusdeploy database."
+Write-Host "if you can't reach the SQLSERVER, add a host entry and re-run"
 
-#iex "& '$octopus_exe_path' 'service' '/install'"
+iex "& '$octopus_exe_path' 'service' '/install'"
 #iex "& '$octopus_exe_path' 'service' '/start'"
 
 

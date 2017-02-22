@@ -4,7 +4,7 @@ $UserKey = “HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8
 Get-Disk |
 Where partitionstyle -eq ‘raw’ |
 Initialize-Disk -PartitionStyle MBR -PassThru |
-New-Partition -AssignDriveLetter -UseMaximumSize |
+New-Partition -AssignDriveLetter -UseMaximumSize 
 Format-Volume -FileSystem NTFS -NewFileSystemLabel “disk2” -Confirm:$true  -DriveLetter:D
 
 

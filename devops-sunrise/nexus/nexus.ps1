@@ -51,7 +51,7 @@ echo "### Download Nexus Binaries ###"
 $clnt.DownloadFile($nexus_zip_url, $nexus_zip_path) | Out-Null
 
 echo "### Download Nexus DataBackup ###"
-#$clnt.DownloadFile($nexus_data_backup_url, $nexus_data_backup_path) | Out-Null
+$clnt.DownloadFile($nexus_data_backup_url, $nexus_data_backup_path) | Out-Null
 
 echo "### Choco Install ###"
 iwr $chocoUri -UseBasicParsing | iex | Out-Null
@@ -59,8 +59,6 @@ choco install -r -y 7zip | Out-Null
 
 echo "### Unzip Nexus Binaries ###"
 iex "& '$7zipExe' 'x' '$nexus_zip_path' '-aoa' '-o$program_file_root'" | Out-Null
-
-
 
 
 echo "### Download Nexus Configuration ###"

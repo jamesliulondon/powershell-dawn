@@ -5,8 +5,7 @@ Get-Disk |
 Where partitionstyle -eq ‘raw’ |
 Initialize-Disk -PartitionStyle MBR -PassThru |
 New-Partition -AssignDriveLetter -UseMaximumSize 
-Format-Volume -FileSystem NTFS -NewFileSystemLabel “disk2” -Confirm:$true  -DriveLetter:D
-
+Format-Volume -FileSystem NTFS -NewFileSystemLabel “disk2” -Confirm:$true  -DriveLetter:D 
 
 
 Set-ItemProperty -Path $AdminKey -Name “IsInstalled” -Value 0
